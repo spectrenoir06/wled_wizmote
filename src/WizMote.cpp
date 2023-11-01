@@ -27,12 +27,7 @@ void WizMoteClass::begin() {
     initialized = true;
 }
 
-void WizMoteClass::initializeEspNow(int channel) {
-
-    // Set Wi-Fi Channel
-    if (wifi_set_channel(channel) != true) {
-        printException("setting Wi-Fi channel failed");
-    }
+void WizMoteClass::initializeEspNow() {
 
     // Set device as a Wi-Fi Station
     if (WiFi.mode(WIFI_STA) != true) {
@@ -54,11 +49,15 @@ void WizMoteClass::initializeEspNow(int channel) {
         printException("setting ESP-NOW role failed");
     };
 
-    // Register the broadcast address as a peer with role SLAVE
-    if (esp_now_add_peer(WizMoteClass::broadcastAddress, ESP_NOW_ROLE_SLAVE, WIFI_CHANNEL, NULL, 0)  != OK) {
-        printException("adding ESP-NOW peer failed");
-    }
 }
+
+void WizMoteClass::setChannel(uint8_t ch)
+{
+    esp_now_del_peer(WizMoteClass::broadcastAddress);
+    wifi_set_channel(ch);
+    esp_now_add_peer(WizMoteClass::broadcastAddress, ESP_NOW_ROLE_SLAVE, ch, NULL, 0);
+}
+
 
 uint8_t WizMoteClass::readButtonPress() {
 
