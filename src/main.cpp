@@ -26,15 +26,25 @@ message_structure_t broadcast_data;
 WizMoteClass WizMote;
 
 uint8_t ch = 1;
+uint8_t repeat = 10;
 
 void on_data_sent(uint8_t *mac_addr, uint8_t sendStatus) {
+  delay(0.1);
   ch++;
   if(ch <= 14) {  
     WizMote.setChannel(ch);
     WizMote.broadcast((uint8_t *) &broadcast_data, sizeof(message_structure_t));
-  }else{
-    // Turn the WizMote off once the packet has been sent
-    WizMote.powerOff();
+  }
+  else {
+    if(repeat > 0) {
+      repeat--;
+      ch = 1;
+      WizMote.setChannel(ch);
+      WizMote.broadcast((uint8_t *) &broadcast_data, sizeof(message_structure_t));
+    }
+    else {
+      WizMote.powerOff();
+    }
   }
 
 }
