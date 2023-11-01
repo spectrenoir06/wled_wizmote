@@ -18,13 +18,15 @@ public:
 
     void begin();
 
-    void initializeEspNow(int channel);
+    void initializeEspNow();
 
     uint8_t readButtonPress();
 
     uint32_t nextSequenceNumber();
 
     void powerOff();
+
+    void setChannel(uint8_t ch);
 
     void registerSendCallback(esp_now_send_cb_t cb);
 

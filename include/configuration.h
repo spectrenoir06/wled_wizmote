@@ -1,9 +1,3 @@
-
-// This is the Wi-Fi channel the remote will use to broadcast its packages.
-// Set it to the channel your ESP-Home receiver uses. Typically, this will
-// be the channel used by your router.
-#define WIFI_CHANNEL 13
-
 // This is the baud rate the serial interface will use for communication.
 #define BAUD_RATE 115200
 
