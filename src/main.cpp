@@ -29,7 +29,7 @@ uint8_t ch = 1;
 uint8_t repeat = 10;
 
 void on_data_sent(uint8_t *mac_addr, uint8_t sendStatus) {
-  delay(0.1);
+  delayMicroseconds(5000);
   ch++;
   if(ch <= 14) {  
     WizMote.setChannel(ch);
