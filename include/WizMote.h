@@ -10,6 +10,22 @@
 #include <user_interface.h>
 #include <espnow.h>
 
+typedef struct WizMoteMessageStructure {
+  uint8_t program;  // 0x91 for ON button, 0x81 for all others
+  uint8_t seq[4];   // Incremetal sequence number 32 bit unsigned integer LSB first
+  uint8_t byte5;    // Unknown (seen 0x20)
+  uint8_t button;   // Identifies which button is being pressed
+  uint8_t byte8;    // Unknown, but always 0x01
+  uint8_t byte9;    // Unnkown, but always 0x64
+
+  uint8_t byte10;   // Unknown, maybe checksum
+  uint8_t byte11;   // Unknown, maybe checksum
+  uint8_t byte12;   // Unknown, maybe checksum
+  uint8_t byte13;   // Unknown, maybe checksum
+} message_structure_t;
+
+
+
 class WizMoteClass {
 
 public:
@@ -22,7 +38,7 @@ public:
 
     uint8_t readButtonPress();
 
-    uint32_t nextSequenceNumber();
+    void nextSequenceNumber();
 
     void powerOff();
 
@@ -30,7 +46,8 @@ public:
 
     void registerSendCallback(esp_now_send_cb_t cb);
 
-    void broadcast(uint8_t *data, size_t data_size);
+    void broadcast();
+
 
 private:
 
@@ -41,6 +58,7 @@ private:
     uint32_t sequenceNumber;
 
     static uint8_t broadcastAddress[];
+    message_structure_t broadcast_data;
 };
 
 #endif
