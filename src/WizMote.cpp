@@ -60,32 +60,36 @@ void WizMoteClass::setChannel(uint8_t ch)
 
 
 uint8_t WizMoteClass::readButtonPress() {
-
     // Select input port 0
     Wire.beginTransmission(PCA6416A_I2C_ADDR);
     Wire.write(PCA6416A_INPORT0);
     Wire.endTransmission();
 
     // Request one byte and read input port 0 value
-    if (Wire.requestFrom(PCA6416A_I2C_ADDR, 1) > 0) {
+    if (Wire.requestFrom(PCA6416A_I2C_ADDR, 2) > 1) {
         broadcast_data.program = 0x81;
         broadcast_data.byte5 = 0x20;
         broadcast_data.byte8 = 0x01;
         broadcast_data.byte9 = 0x64;
 
-        uint8_t d = ~Wire.read();
-        if(d == 2) {
+        uint8_t d1 = ~Wire.read();
+        uint8_t d2 = ~Wire.read();
+
+        broadcast_data.byte12 = d1;
+        broadcast_data.byte13 = d2;
+        if(d1 == 2) {
             broadcast_data.button = 1;
             broadcast_data.program = 0x91;
         }
-        else if(d == 1) broadcast_data.button = 2;
-        else if(d == 0) broadcast_data.button = 3;
-        else if(d == 4) broadcast_data.button = 17;
-        else if(d == 8) broadcast_data.button = 16;
-        else if(d == 16) broadcast_data.button = 19;
-        else if(d == 32) broadcast_data.button = 18;
-        else if(d == 64) broadcast_data.button = 9;
-        else if(d == 128) broadcast_data.button = 8;
+        else if(d1 == 1) broadcast_data.button = 2;
+        else if(d1 == 4) broadcast_data.button = 17;
+        else if(d1 == 8) broadcast_data.button = 16;
+        else if(d1 == 16) broadcast_data.button = 19;
+        else if(d1 == 32) broadcast_data.button = 18;
+        else if(d1 == 64) broadcast_data.button = 9;
+        else if(d1 == 128) broadcast_data.button = 8;
+        else if(d2 == 255) broadcast_data.button = 3;
+        else return 0;
         return 1;
     }
     return 0;

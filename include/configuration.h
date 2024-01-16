@@ -18,6 +18,7 @@
 //   Datasheet: https://www.nxp.com/docs/en/data-sheet/PCA6416A.pdf
 #define PCA6416A_I2C_ADDR       0x20
 #define PCA6416A_INPORT0        0x00
+#define PCA6416A_INPORT1        0x01
 
 // The ESP's Pin 16 is connected to the enable pin of a voltage regulator.
 // Setting this Pin to HIGH lets the remote stay awake.
