@@ -5,12 +5,6 @@ uint8_t WizMoteClass::broadcastAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 WizMoteClass::WizMoteClass() {}
 
 void WizMoteClass::begin() {
-
-    // Prevent calling this method a second time
-    if (initialized) {
-        return;
-    }
-
     // Set the voltage regulator pin as an output pin
     pinMode(VOLTAGE_REGULATOR_PIN, OUTPUT);
 
@@ -19,12 +13,6 @@ void WizMoteClass::begin() {
 
     // Initialize I2C Bus
     Wire.begin(SDA_PIN, SCL_PIN);
-
-    // Initialize EEPROM
-    EEPROM.begin(EEPROM_SIZE);
-
-    // Set initialization status
-    initialized = true;
 }
 
 void WizMoteClass::initializeEspNow() {
@@ -96,6 +84,9 @@ uint8_t WizMoteClass::readButtonPress() {
 }
 
 void WizMoteClass::nextSequenceNumber() {
+
+    // Initialize EEPROM
+    EEPROM.begin(EEPROM_SIZE);
 
     // Read sequence number from EEPROM
     EEPROM.get(EEPROM_SEQUENCE_OFFSET, sequenceNumber);
